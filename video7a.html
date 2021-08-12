@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>VR Experiences for language learners</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://morandd.github.io/aframe-multitouch-look-controls/multitouch-look-controls.js"></script>
+    <script>
+      AFRAME.registerComponent("navigate-on-click", {
+        schema: {
+          url: { default: "" }
+        },
+
+        init: function() {
+          var data = this.data;
+          var el = this.el;
+
+          el.addEventListener("click", function() {
+            window.location.href = data.url;
+          });
+        }
+      });
+      AFRAME.registerComponent("auto-enter-vr", {
+        init: function() {
+          this.el.sceneEl.enterVR();
+        }
+      });
+      AFRAME.registerComponent("display-after-video-ended", {
+        init: function() {
+          var thevideo = document.querySelector("#video7a");
+          var thebackdrop = document.querySelector("#backdrop");
+          var theheader1 = document.querySelector("#header1");
+          var thehome = document.querySelector("#home");
+          var theclicker = document.querySelector("#clicker");
+          thevideo.addEventListener("ended", function() {
+            thebackdrop.setAttribute("visible", true);
+            theheader1.setAttribute("visible", true);
+            thehome.setAttribute("visible", true);
+            theclicker.setAttribute("visible", true);
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <video
+          id="video7a"
+          src="https://cdn.glitch.com/3f7b14bd-1d30-4ded-9328-c998fdc720d4%2FVideo7A.mp4?v=1628568719262"
+          autoplay
+          loop="false"
+          display-after-video-ended
+        ></video>
+      </a-assets>
+
+      <a-entity camera look-controls></a-entity>
+      <a-camera position="0 1.5 0">
+        <a-entity id="clicker" visible="false" display-after-video-ended>
+          <a-cursor position="0 0 -.5" fuse="true" timeout="10"></a-cursor>
+        </a-entity>
+      </a-camera>
+
+      <a-videosphere
+        src="#video7a"
+        rotation="0 -90 0"
+        display-after-video-ended
+      >
+      </a-videosphere>
+
+      <!-- This is the ending of the experience, so intead of two option we have a thank you goodbye message and the option to go back the index page  -->
+      <!--  For this reason, there is only one box, and it has a different position -->
+
+      <a-cylinder
+        id="backdrop"
+        visible="false"
+        display-after-video-ended
+        color="#000000"
+        segments-radial="5150"
+        opacity="0.55"
+        height="1"
+        radious="20"
+        open-ended="true"
+        side="single"
+        rotation="20 0 0"
+        position="0 2.3 -2.5"
+        scale="2.6 1.9 0.5"
+        theta-length="360"
+      >
+      </a-cylinder>
+
+      <a-entity
+        id="header1"
+        visible="false"
+        display-after-video-ended
+        position="0 2.6 -1.7"
+        text="align: center; width: 4; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: La experiencia ha terminado"
+      >
+      </a-entity>
+
+      <a-entity
+        id="home"
+        visible="false"
+        display-after-video-ended
+        position="0 2.2 -1.7"
+        text="align: center; width: 2; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: Volver al inicio"
+      >
+      </a-entity>
+
+      <a-box
+        position="0 2.18 -1.7"
+        material="opacity: 0.001"
+        width="1"
+        height="0.3"
+        depth="0.2"
+        navigate-on-click="url: https://vr4language.glitch.me/index.html"
+      ></a-box>
+    </a-scene>
+  </body>
+</html>

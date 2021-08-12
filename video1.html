@@ -1,0 +1,182 @@
+<!-- THIS FIRST PAGE WILL HAVE THE MOST COMMENTS ABOUT HOW EVERYTHING WORKS SINCE MOST REPEATS ITSELF ON THE FOLLOWING PAGES
+  HOWEVER, IT NEW THINGS COME UP ON THE FOLLOWING PAGES THAT ARE NOT PART OF THIS PAGE, THERE WILL BE A COMMENT EXPLAINING THEM-->
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- this is for characters in languages-->
+    <!--  here in the head we add the title and the scripts that we need for the components on the page to work  -->
+    <title>VR Experiences for language learners</title>
+    <!--  this script is for the a-frame framework -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!--  this script is for the look-controls on vr, such as looking at something to 'click' it, instead of actually clicking on it -->
+    <script src="https://morandd.github.io/aframe-multitouch-look-controls/multitouch-look-controls.js"></script>
+
+    <!-- you can also create your own components with a-frame  -->
+
+    <!-- this one makes it that clicking (or in this vr case looking) something will make it navigate to another page, so, a link within a-frame elements  -->
+    <script>
+            AFRAME.registerComponent("navigate-on-click", {
+              schema: {
+                url: { default: "" }
+              },
+
+              init: function() {
+                var data = this.data;
+                var el = this.el;
+
+                el.addEventListener("click", function() {
+                  window.location.href = data.url;
+                });
+              }
+            });
+
+            <!-- this one makes the device you are using to see the page to go into vr mode automatically when loading this page  -->
+            AFRAME.registerComponent("auto-enter-vr", {
+              init: function() {
+                this.el.sceneEl.enterVR();
+              }
+            });
+
+      <!-- this component waits for the video on the page to finish playing, and when that happens it changes the attributes of several elements on the page -->
+      <!-- the purpose of this is to hide the options (and the capability of clicking on them) from the user until the video has ended  -->
+
+            AFRAME.registerComponent("display-after-video-ended", {
+              init: function() {
+                var thevideo = document.querySelector("#video1");
+                var thebackdrop = document.querySelector("#backdrop");
+                var theheader1 = document.querySelector("#header1");
+                var thesubheader1 = document.querySelector("#subheader1");
+                var theoption1 = document.querySelector("#option1");
+                var theoption2 = document.querySelector("#option2");
+                var theclicker = document.querySelector("#clicker");
+                thevideo.addEventListener("ended", function() {
+                  thebackdrop.setAttribute("visible", true);
+                  theheader1.setAttribute("visible", true);
+                  thesubheader1.setAttribute("visible", true);
+                  theoption1.setAttribute("visible", true);
+                  theoption2.setAttribute("visible", true);
+                  theclicker.setAttribute("visible", true);
+                });
+              }
+            });
+    </script>
+
+    <!-- here the body of the page begins.  -->
+  </head>
+  <body>
+    <a-scene>
+      <!-- within the body of the page we always have a scene, in which all of our a-frame elements are  -->
+      <a-assets>
+        <!-- assets are added to be called upon later for display  -->
+        <!-- we need to give our video and ID to call on it later  -->
+        <video
+          id="video1"
+          src="https://cdn.glitch.com/3f7b14bd-1d30-4ded-9328-c998fdc720d4%2FVideo1.mp4?v=1628561537282"
+          autoplay
+          loop="false"
+          display-after-video-ended
+        ></video>
+      </a-assets>
+
+      <a-entity camera look-controls></a-entity>
+      <!-- what allows the user to 'click with teir eyes', which is useless without a cursor to point with  -->
+      <a-camera position="0 1.5 0">
+        <!-- where the user's point of view will be as soon as the page loads  -->
+        <!-- within the camera we created an entity that holds the cursos. We do this because entities can be given and ID and therefore can be called upon -->
+        <!-- particularly, this entity holds the cursor, which we need to point at things with our gaze and then 'click' on them  -->
+        <!--  first, we set the entity to not be visible, and we call on the component we created so the entity will be visible when the video ends-->
+        <a-entity id="clicker" visible="false" display-after-video-ended>
+          <a-cursor position="0 0 -.5" fuse="true" timeout="10"></a-cursor>
+          <!--  time out is the time it takes to trigger a function on an element after pointing at it with the cursor -->
+        </a-entity>
+      </a-camera>
+
+      <!-- THIS IS WHAT MAKES OUR 360 VIDEO A 360 ENVOLVING SPHERE THAT IS ALL AROUND THE USER  -->
+      <!--  the rotation is to position the part of the video you want the user to be looking at by default when the page loads -->
+      <a-videosphere src="#video1" rotation="0 -90 0" display-after-video-ended>
+      </a-videosphere>
+
+      <!--  I arbitrarily chose a cylinder, but any primitive geometry from A-frame will do -->
+      <!--  this is the 'backdrop' on which the options are displayed, which isn't visible until the video ends -->
+      <a-cylinder
+        id="backdrop"
+        visible="false"
+        display-after-video-ended
+        color="#000000"
+        segments-radial="5150"
+        opacity="0.55"
+        height="1"
+        radious="20"
+        open-ended="true"
+        side="single"
+        rotation="20 0 0"
+        position="0 2.3 -2.5"
+        scale="2.6 1.9 0.5"
+        theta-length="360"
+      >
+      </a-cylinder>
+
+      <!--  here is the entity that holds the text that instroduces the options, which isn't visible until the video ends  -->
+      <!--  you can type the text that you want to be displayed right here at the end of line 121, for example, after the word 'value'  -->
+
+      <a-entity
+        id="header1"
+        visible="false"
+        display-after-video-ended
+        position="0 2.6 -1.7"
+        text="align: center; width: 4; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: ELIGE UNA DE LAS OPCIONES"
+      >
+      </a-entity>
+      
+      <a-entity
+        id="subheader1"
+        visible="false"
+        display-after-video-ended
+        position="0 2.4 -1.7"
+        text="align: center; width: 1.5; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: Posiciona el cursor sobre una de las opciones y espera 3 segundos "
+      >
+      </a-entity>
+
+      <!--  here is the entity that holds the text for option 1  -->
+      <a-entity
+        id="option1"
+        visible="false"
+        display-after-video-ended
+        position="-1.3 2.2 -1.7"
+        text="align: center; width: 2; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: *ELIGE \n NO DECIR NADA*"
+      >
+      </a-entity>
+
+      <!--  here is the transparent box behind the text which makes it possible to 'click' on the text, which isn't visible until the video ends -->
+      <a-box
+        position="-1.2 2.15 -1.7"
+        material="opacity: 0.001"
+        width="0.7"
+        height="0.3"
+        depth="0.2"
+        navigate-on-click="url: https://vr4language.glitch.me/video2a.html"
+      ></a-box>
+
+      <!--  here is the entity that holds the text for option 2  -->
+      <a-entity
+        id="option2"
+        visible="false"
+        display-after-video-ended
+        position="1.1 2.2 -1.7"
+        text="align: center; width: 2; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: *ELIGE DECIR: \n MUCHO GUSTO, \n SRA. MONTALTO*"
+      >
+      </a-entity>
+
+      <!--  here is the box behind the text of option 2  -->
+      <a-box
+        position="1.1 2.2 -1.7"
+        material="opacity: 0.001"
+        width="0.7"
+        height="0.3"
+        depth="0.2"
+        navigate-on-click="url: https://vr4language.glitch.me/video2b.html"
+      ></a-box>
+    </a-scene>
+  </body>
+</html>
