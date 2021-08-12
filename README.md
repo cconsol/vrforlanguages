@@ -20,6 +20,8 @@ Open each file and check out the comments (in gray) for more info.
 
 ## Make this project your own 🚀
 
+### You can remix this project on Glitch by clicking [here](https://glitch.com/edit/#!/remix/vr4language)
+
 This project was envisioned as a template for other people to create their own immersive experiences for language learning. Currently, this is an alive (constantly changing) demo made in Spanish for advanced learners of Spanish to notice and reflect on dinner etiquette in a restaurant in Argentina. 
 You can change the videos by uploading your own, or videos you found online; you can also change the options displayed after every video by just typing different information in the html code.
 
