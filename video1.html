@@ -87,7 +87,7 @@
         <!-- particularly, this entity holds the cursor, which we need to point at things with our gaze and then 'click' on them  -->
         <!--  first, we set the entity to not be visible, and we call on the component we created so the entity will be visible when the video ends-->
         <a-entity id="clicker" visible="false" display-after-video-ended>
-          <a-cursor position="0 0 -.5" fuse="true" timeout="10"></a-cursor>
+          <a-cursor color= "red" position="0 0 -.5" fuse="true" timeout="10"></a-cursor>
           <!--  time out is the time it takes to trigger a function on an element after pointing at it with the cursor -->
         </a-entity>
       </a-camera>
@@ -134,7 +134,7 @@
         visible="false"
         display-after-video-ended
         position="0 2.4 -1.7"
-        text="align: center; width: 1.5; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: Posiciona el cursor sobre una de las opciones y espera 3 segundos "
+        text="align: center; width: 1.5; color:#ffffe6; font: https://cdn.aframe.io/fonts/KelsonSans.fnt; value: Via URL; value: Posiciona el cursor rojo sobre una de las opciones y espera 3 segundos "
       >
       </a-entity>
 
